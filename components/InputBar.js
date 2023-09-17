@@ -3,45 +3,76 @@ import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { getOpenAi } from "../api/openai";
 import { ChatContext } from "../context/ChatContext";
 import { TouchableOpacity } from 'react-native';
+import Icon from "react-native-vector-icons/Feather"
+import { getQuizOpenAI } from "../api/openai"
+
 
 export default function InputBar(props) {
     const chatContext = useContext(ChatContext)
     const [inputValue, setInputValue] = useState('');
 
-    const handleButtonPress = async () => {
-        console.log("handleButtonPress");
+    const handleSend = async () => {
+        console.log("handleSend");
         await chatContext.addUserInput(inputValue);
         setInputValue("");
-        await getOpenAi(inputValue).then(r => chatContext.addResponse(r));
+        getOpenAi(inputValue).then(r => chatContext.addResponse(r));
+    }
+
+    const handleQuiz = async () => {
+        console.log("handleQuiz")
+        console.log(chatContext.chatLog);
+        // Reset chat log
+        chatContext.resetLog();
+    
+        // Call to get the quiz
+        if (chatContext.chatLog !== undefined && chatContext.chatLog !== "") {
+          console.log("Sending" + chatContext.chatLog)
+          getQuizOpenAI(chatContext.chatLog).then((r) => {
+            console.log("Received: " + r);
+            r = JSON.parse(r);
+            r.questions.forEach(item => {
+              chatContext.addQuiz(item)
+            });
+            chatContext.addQuizSet(r.questions)
+          });
+        } else {
+          console.log("Empty, do not send")
+        }
     }
 
     return (
         <View style={styles.container}>
-            <TextInput
-                placeholder="Text Input"
-                style={styles.input}
-                value={inputValue}
-                onChangeText={text => setInputValue(text)}
-            ></TextInput>
 
-            <TouchableOpacity
-                style={{
-                    backgroundColor: '#000', // Button background color
-                    margin: 5,
-                    padding: 5, // Padding to add
-                    borderRadius: 5, // Optional: Add border radius for rounded corners
-                }}
-                onPress={handleButtonPress}
-                >
-                <Text style={{ color: '#fff', fontSize: 20,textAlign: 'center' }}>{"Submit"}</Text>
-            </TouchableOpacity>
+            <View style={styles.wrapper}>
+                <TextInput
+                    placeholder="Text Input"
+                    placeholderTextColor="#969696" 
+                    style={styles.input}
+                    value={inputValue}
+                    onChangeText={text => setInputValue(text)}
+                ></TextInput>
 
-            {/* <Button 
-                title ="Submit"
-                color="#000"
-                style={{ padding: 50}}
-                onPress={handleButtonPress}
-            /> */}
+                <TouchableOpacity
+                    style={{
+                        // backgroundColor: '#000', // Button background color
+
+                        padding: 10, // Padding to add
+                        borderRadius: 5, // Optional: Add border radius for rounded corners
+                    }}
+                    onPress={handleSend}
+                    >
+                    <Icon name="send" style={styles.icon}></Icon>
+                    {/* <Text style={{ color: '#fff', fontSize: 20,textAlign: 'center' }}>{"ios-paper-plane-outline"}</Text> */}
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.quiz}
+                    onPress={handleQuiz}
+                    >
+                    <Icon name="book-open" style={styles.quiz}></Icon>
+                    {/* <Text style={{ color: '#fff', fontSize: 20,textAlign: 'center' }}>{"ios-paper-plane-outline"}</Text> */}
+                </TouchableOpacity>
+            </View>
             
     
         </View>
@@ -56,16 +87,38 @@ const styles = StyleSheet.create({
         height: "auto",
         padding: 20,
         bottom: "auto",
-        backgroundColor: '#00ff00'
+        // backgroundColor: '#fffdaf'
     },
     input: {
         top: 0,
-        width: '80%',
+        height: 'auto',
+        width: "100%",
+        flexWrap: 'wrap',
+        
+        paddingRight: 65,
         padding: 10,
-        fontSize: 20,
-        borderRadius: 20,
-        backgroundColor: "#f0f0f0",
-        color: "#000"
+        fontSize: 15,
+        borderRadius: 10,
+        backgroundColor: "#ededed",
     },
+    icon: {
+        color: "#000",
+        fontSize: 25,
+        marginLeft: -70,
+    },
+    quiz: {
+        color: "#000",
+        fontSize: 25,
+        marginLeft: -30,
+        fontSize: 25,
+        padding: 5
 
+    },
+    wrapper: {
+        display: "flex",
+        flexDirection: "row",
+        width: '100%',
+        borderRadius: 10,
+        backgroundColor: '#ededed',
+    }
 });

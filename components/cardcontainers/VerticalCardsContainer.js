@@ -25,7 +25,8 @@ export function VerticalCardsContainer(props) {
 
 const styles = StyleSheet.create({
     container: {
-        
+        margin: 0,
+
     },
     titleContainer: {
 
@@ -35,9 +36,9 @@ const styles = StyleSheet.create({
         fontSize: 25
     },
     cardsContainer: {
-        backgroundColor: 'white',
+        backgroundColor: 'black',
         width: "100%",
         padding: 20,
-        margin: 20,
+        margin: 0,
     }
 });

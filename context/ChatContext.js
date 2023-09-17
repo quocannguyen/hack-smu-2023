@@ -6,14 +6,21 @@ export const ChatContext = createContext({
     responses: [],
     addResponse: (response) => {},
     userResponse: [],
-    resetResponse: [],
+    resetLog: () => {},
+    quizzes: [],
+    addQuiz: () => {},
+    chatLog: "",
+    quizSets: [],
+    addQuizSet: () => {},
 })
-let ChatLog = ""
 
 export function ChatContextProvider(props) {
+    const [chatLog, setChatLog] = useState("")
     const [userInputsState, setUserInputsState] = useState([])
     const [responsesState, setResponsesState] = useState([])
     const [userResponseState, setUserResponseState] = useState([])
+    const [quizzesState, setQuizzesState] = useState([])
+    const [quizSetsState, setQuizSetsState] = useState([])
 
     async function addUserInputHandler(userInput) {
         setUserResponseState((prevUserResponseState) =>[
@@ -23,8 +30,10 @@ export function ChatContextProvider(props) {
                 content: userInput
             }
         ])
-        ChatLog += "User: " + userInput + '\n'
+        // chatLog += "User: " + userInput + '\n'
+        setChatLog((prevState) =>prevState.chatLog += "User: " + userInput + '\n')
         console.log(userResponseState)
+        console.log("ChatContext: setUserResponseState: " + chatLog)
     }
 
     async function addResponseHandler(response) {
@@ -35,13 +44,40 @@ export function ChatContextProvider(props) {
                 content: response
             }
         ])
-        ChatLog += "System: " + response + '\n'
+        // chatLog += "System: " + response + '\n'
+        setChatLog(prevState => prevState.chatLog + "System: " + response + '\n')
         console.log(userResponseState)
+        console.log("ChatContext: setUserResponseState: " + chatLog)
     }
 
     async function resetLogHandler() {
         console.log("Reset handler")
         setUserResponseState([]);
+        setChatLog("")
+    }
+
+    async function addQuizHandler(quizz) {
+        console.log("ChatContext: addQuizHandler: " + quizz)
+        setQuizzesState((prevState) => [
+            ...prevState,
+            quizz
+        ])
+        console.log("ChatContext: addQuizHandler: " + quizzesState)
+    }
+
+    async function addQuizSetHandler(quizSet) {
+        // let quizSet = [...quizzesState]
+        // console.log("ChatContext: addQuizSetHandler: "  + quizSet)
+
+        // setQuizSetsState((prevState) => [
+        //     ...prevState,
+        //     quizSet
+        // ])
+        // // setQuizzesState([])
+        setQuizSetsState((prevState) => [
+            ...prevState,
+            quizSet,
+        ])
     }
 
     const context = {
@@ -50,7 +86,12 @@ export function ChatContextProvider(props) {
         responses: responsesState,
         addResponse: addResponseHandler,
         userResponse: userResponseState,
-        resetResponse: resetLogHandler
+        resetLog: resetLogHandler,
+        quizzes: quizzesState,
+        addQuiz: addQuizHandler,
+        chatLog: chatLog,
+        quizSets: quizSetsState,
+        addQuizSet: addQuizSetHandler
     }
     return (
         <ChatContext.Provider value={context}>

@@ -89,8 +89,10 @@ const styles = StyleSheet.create({
     width: 300,
     height: 200,
     borderRadius: 20,
-    backgroundColor: "yellow",
-    marginTop: 10,
+    backgroundColor: "black",
+    borderColor: 'black',
+    borderWidth: 1,
+    marginVertical: 200,
     marginHorizontal: 45,
     justifyContent: "center",
     alignItems: "center",
@@ -99,11 +101,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     position: "absolute",
-    color: "black",
+    color: "white",
   },
   flippedText: {
     transform: [{ scaleX: -1 }], // Apply horizontal flip to the text
-    color: "black",
+    color: "white",
   },
   hiddenText: {
     display: "none",

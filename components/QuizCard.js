@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     front: {
         height: 400,
         width: 250,
-        backgroundColor: "#D8D9CF",
+        backgroundColor: "#000",
         borderRadius: 16,
         position: "absolute",
         alignItems: "center",
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
      back: {
         height: 400,
         width: 250,
-        backgroundColor: "#FF8787",
+        backgroundColor: "#000",
         borderRadius: 16,
         backfaceVisibility: "hidden",
         alignItems: "center",

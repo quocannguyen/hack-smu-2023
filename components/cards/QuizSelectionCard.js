@@ -18,7 +18,7 @@ export function QuizSelectionCard(props) {
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
         </View>
-          <Ionicons name={iconName} color="white" size={28} style={{marginLeft: 40}}/>
+          <Ionicons name={iconName} color="black" size={28} style={{marginLeft: 40}}/>
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 40,
+    padding: 20,
     borderRadius: 8,
     width: 'auto',
     marginTop: 5,
@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'black',
   },
   description: {
     fontSize: 14,
-    color: 'white',
+    color: 'black',
   },
 });
 
