@@ -3,58 +3,60 @@ import  { StyleSheet, ScrollView, View, Text, StatusBar, TextInput, KeyboardAvoi
 import { ChatContext } from "../context/ChatContext";
 import ChatBox from "./chatboxes/ChatBox.js";
 import UserChatBox from "./chatboxes/UserChatBox";
-import { useContext } from "react";
+import { useContext, useRef, useEffect } from "react";
 import InputBar from "./InputBar"
+import { useFocusEffect } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
 export default function ChatView(props) {
-    const chatContext = useContext(ChatContext);
-    
-
+  const chatContext = useContext(ChatContext);
   return (
     <KeyboardAvoidingView
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+      style={styles.container}
+    >
       <View style={styles.scrollArea}>
         <ScrollView
           contentContainerStyle={styles.scrollArea_contentContainer}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          ref={ref => {this.scrollView = ref}}
+          onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}
         >
-            {chatContext.userResponse.map(
-              (element, index) => {
-                if (element.role == "user") {
-                  return <UserChatBox text={element.content} key={index}/>
-                } else {
-                  return <ChatBox text={element.content} key={index}/>
-                }
+          {chatContext.userResponse.map(
+            (element, index) => {
+              if (element.role == "user") {
+                return <UserChatBox text={element.content} key={index}/>
+              } else {
+                return <ChatBox text={element.content} key={index}/>
               }
-            )}
+            }
+          )}
         </ScrollView>
         <InputBar/>
        </View>
-
-
     </KeyboardAvoidingView>
   )
 }
 const styles = StyleSheet.create({
     container: {
-    justifyContent: "center"
+      flex: 1,
   },
   scrollArea: {
-    // top: -100,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(230, 230, 230,1)",
-    borderRadius: 10,
+    backgroundColor: "#fff",
+    borderRadius: 5,
     alignSelf: "center",
     display: "flex",
     flexDirection: "column",
-
+    paddingHorizontal: 10,
   },
   scrollArea_contentContainer: {
-    height: "100%",
+    height: "auto",
     width: "100%",
     alignSelf: "center",
-    backgroundColor: "#f0f0f0",
-    borderRadius: 10,
+    borderRadius: 5,
 
   }
     

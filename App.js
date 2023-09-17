@@ -16,8 +16,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <ChatContextProvider>
-
-      <Tab.Navigator screenOptions={({ route }) => ({
+        <Tab.Navigator screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -33,14 +32,14 @@ export default function App() {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: '#40F8FF',
-          tabBarInactiveTintColor: 'white', tabBarStyle: { backgroundColor: '#0C356A' },
+          tabBarActiveTintColor: '#269df4',
+          tabBarInactiveTintColor: 'white', tabBarStyle: { backgroundColor: '#000' },
           headerShown: false
         })}
-      >
-        <Tab.Screen name="Quiz" component={QuizScreen} />
-        <Tab.Screen name="Chat" component={ChatScreen} />
-      </Tab.Navigator>
+          >
+            <Tab.Screen name="Quiz" component={QuizScreen} />
+            <Tab.Screen name="Chat" component={ChatScreen} />
+          </Tab.Navigator>
 
         </ChatContextProvider>
       </NavigationContainer>

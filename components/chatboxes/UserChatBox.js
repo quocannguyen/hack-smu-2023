@@ -16,8 +16,10 @@ const styles = StyleSheet.create({
         maxWidth: "80%",
         width: "auto",
         height: "auto",
-        borderRadius: 50,
-        backgroundColor: "#405DE6",
+        borderRadius: 15,
+        borderColor: 'black',
+        borderWidth: 1,
+        backgroundColor: "#fff",
         marginTop: 10,
         marginLeft: "auto",
         padding: 10,
@@ -25,8 +27,8 @@ const styles = StyleSheet.create({
     },
     text: {
         // fontFamily: "Cochin",
-        fontSize: 20,
-        backgroundColor: '#405DE6',
-        color: "#fff"
+        fontSize: 15,
+        backgroundColor: '#fff',
+        color: "#000"
     }
 })
