@@ -5,17 +5,18 @@ import TitleCard from "../components/TitleCard"
 import {LinearGradient} from 'expo-linear-gradient';
 import {QuizSelectionCard} from '../components/cards/QuizSelectionCard';
 import { VerticalCardsContainer } from "../components/cardcontainers/VerticalCardsContainer"
-// import Carousel from 'react-native-reanimated-carousel';
 import { Overlay, withTheme } from 'react-native-elements';
 import { FlippedCard } from '../components/cards/FlippedCard'
 import React, { useState, useContext, useEffect } from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { getQuizOpenA,fetchCartesiData } from "../api/openai";
+import { getQuizOpenAI,fetchCartesiData } from "../api/openai";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from "react-native-vector-icons/Feather"
 
 import { ChatContext } from "../context/ChatContext";
+import LottieView from "lottie-react-native"
+
 
 export default function QuizScreen() {
   const chatContext = useContext(ChatContext)
@@ -23,6 +24,7 @@ export default function QuizScreen() {
   const [quizzesState, setQuizzesState] = useState([]);
 
   const [cartesiDB, setCartesiDB] = useState([]);
+  const [overlayTitleState, setOverlayTitleState] = useState("")
   
   const toggleOverlay = () => {
     console.log("toggleOverlay")
@@ -31,19 +33,25 @@ export default function QuizScreen() {
 
   useEffect(() => {
     fetchCartesiData().then((r) => {
-      // console.log("Received: " + r);
       setCartesiDB(r);
     });
   }, [])
 
   function handleQuiz() {
-    console.log("handleQuiz")
-    console.log(chatContext.chatLog);
+    console.log("=======handleQuiz=========");
+    console.log(chatContext.userResponse);
 
     // Call to get the quiz
     if (chatContext.chatLog !== undefined && chatContext.chatLog !== "") {
-      console.log("Sending" + chatContext.chatLog)
-      getQuizOpenAI(chatContext.chatLog).then((r) => {
+      console.log("Sending" + chatContext.chatLog);
+      console.log("Creating chat log");
+      var chatLog = "";
+      chatContext.userResponse.forEach(element => {
+        console.log(element.content);
+        chatLog += element.role + ": " + element.content;
+      });
+      console.log(chatLog)
+      getQuizOpenAI(chatLog).then((r) => {
         console.log("Received: " + r);
         r = JSON.parse(r);
         r.questions.forEach(item => {
@@ -62,22 +70,35 @@ export default function QuizScreen() {
   return (
     <View style={{ flex: 1, width: "100%", backgroundColor: "white" }}>
       
-      <Overlay isVisible={visible} onBackdropPress={toggleOverlay} style={{width: "120%", backgroundColor: "white"}}>
+      <Overlay isVisible={visible} onBackdropPress={toggleOverlay} style={{width: "100%", backgroundColor: "white"}}>
         <View style={styles.quizTakingView}>
           <View title="topBar" style={{ display: "flex", flexDirection: "row", justifyContent: "center"}}>
-          <Button title="Close test" color="black" fontWeight='bold' onPress={toggleOverlay} />
+
+          <TouchableOpacity
+          onPress={toggleOverlay}
+          style={styles.button}
+          >
+            <Ionicons name={'close-outline'} color="black" size={28} style={{marginLeft: 40}}/>
+          </TouchableOpacity>
+          <Text>{overlayTitleState}</Text>
 
           </View>
           <ScrollView style={{display: "flex", backgroundColor: "white"}} horizontal>
 
-            {chatContext.quizzes.map((element, index) => {
+            {quizzesState.map((element, index) => {
               console.log(element);
               console.log("Loop: " + index + element.question);
               return <FlippedCard question={element.question} answer={element.answer} key={index} />
             })}
           </ScrollView>
-          
-          
+          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+            <LottieView 
+              source={require('../assets/lottie/cat.json')} 
+              style={{ width: 100, height: 100, marginBottom: 10 }}
+              autoPlay
+              loop
+            />
+          </View>
         </View>
       </Overlay>
 
@@ -94,18 +115,20 @@ export default function QuizScreen() {
           <View style={styles.innerContent}>
             {/* Add other components/content here */}
             <Text style={styles.sectionTitle}>
-              Recent Quizzes
+              Personalized Quizzes
             </Text>
             <ScrollView style={styles.scrollView} horizontal>
               {chatContext.quizSets.map((quizSet, index) => {
                 return <QuizSelectionCard 
+                  style={{marginHorizontal: 20}}
                   key={index}
-                  title="test" 
-                  description="text" 
+                  title={"Quiz " + index}  
+                  description="" 
                   leftColor="#fff" 
                   rightColor="#fff" 
                   iconName="arrow-forward-outline" 
                   onPress={() => {
+                    setOverlayTitleState("Quiz " + index)
                     setQuizzesState(quizSet)
                     console.log("QuizScreen: toggleOverlay: ")
                     console.log(quizzesState);
@@ -134,11 +157,19 @@ export default function QuizScreen() {
                   <Text style={styles.quiztext}>Create Quiz from Chat</Text>
 
               </TouchableOpacity>
+              {cartesiDB != undefined && cartesiDB.map((item, index) => {
+                let data = JSON.parse(item.echo)
+                return <QuizSelectionCard key={index} title={data.title} description="Test your knowledge here!" leftColor="#fff" rightColor="#fff" iconName="arrow-forward-outline" onPress={() => {
+                  setOverlayTitleState(data.title)
+                  setQuizzesState(data.questions);
+                  toggleOverlay();
+                }}/>
+              })}
+                {/* <QuizSelectionCard title="test" description="text" leftColor="#fff" rightColor="#fff" iconName="arrow-forward-outline"/> */}
+                {/* <QuizSelectionCard title="test" description="text" leftColor="#fff" rightColor="#fff" iconName="arrow-forward-outline"/>
                 <QuizSelectionCard title="test" description="text" leftColor="#fff" rightColor="#fff" iconName="arrow-forward-outline"/>
                 <QuizSelectionCard title="test" description="text" leftColor="#fff" rightColor="#fff" iconName="arrow-forward-outline"/>
-                <QuizSelectionCard title="test" description="text" leftColor="#fff" rightColor="#fff" iconName="arrow-forward-outline"/>
-                <QuizSelectionCard title="test" description="text" leftColor="#fff" rightColor="#fff" iconName="arrow-forward-outline"/>
-                <QuizSelectionCard title="test" description="text" leftColor="#fff" rightColor="#fff" iconName="arrow-forward-outline"/>
+                <QuizSelectionCard title="test" description="text" leftColor="#fff" rightColor="#fff" iconName="arrow-forward-outline"/> */}
               </View>
             </View>
           </View>
@@ -150,6 +181,13 @@ export default function QuizScreen() {
 }
 
 const styles = StyleSheet.create({
+  button: {
+    marginRight: "auto",
+  },
+  close: {
+    fontSize: 40,
+    padding: 10,
+  },
   wrapper: {
     display: "flex",
     height: 'auto',

@@ -23,7 +23,7 @@ export function ChatContextProvider(props) {
     const [quizSetsState, setQuizSetsState] = useState([])
 
     async function addUserInputHandler(userInput) {
-        setUserResponseState((prevUserResponseState) =>[
+        await setUserResponseState((prevUserResponseState) =>[
             ...prevUserResponseState,
             {
                 role: "user", 
@@ -31,23 +31,22 @@ export function ChatContextProvider(props) {
             }
         ])
         // chatLog += "User: " + userInput + '\n'
-        setChatLog((prevState) =>prevState.chatLog += "User: " + userInput + '\n')
-        console.log(userResponseState)
-        console.log("ChatContext: setUserResponseState: " + chatLog)
+        const newString = chatLog + "User: " + userInput + '\n'
+        setChatLog(newString)
+        console.log("ChatContext: setUserState: " + chatLog)
     }
 
     async function addResponseHandler(response) {
-        setUserResponseState((prevUserResponseState) =>[
+        await setUserResponseState((prevUserResponseState) =>[
             ...prevUserResponseState,
             {
                 role: "response",
                 content: response
             }
         ])
-        // chatLog += "System: " + response + '\n'
-        setChatLog(prevState => prevState.chatLog + "System: " + response + '\n')
-        console.log(userResponseState)
-        console.log("ChatContext: setUserResponseState: " + chatLog)
+        const newString = chatLog + "System: " + response + '\n'
+        setChatLog(newString)
+        console.log("ChatContext: setResponseState: " + chatLog)
     }
 
     async function resetLogHandler() {

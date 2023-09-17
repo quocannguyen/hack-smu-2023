@@ -15,30 +15,38 @@ export default function InputBar(props) {
         console.log("handleSend");
         await chatContext.addUserInput(inputValue);
         setInputValue("");
-        getOpenAi(inputValue).then(r => chatContext.addResponse(r));
+        await getOpenAi(inputValue).then(r => chatContext.addResponse(r));
     }
 
     const handleQuiz = async () => {
-        console.log("handleQuiz")
-        console.log(chatContext.chatLog);
-        // Reset chat log
-        chatContext.resetLog();
-    
-        // Call to get the quiz
-        if (chatContext.chatLog !== undefined && chatContext.chatLog !== "") {
-          console.log("Sending" + chatContext.chatLog)
-          getQuizOpenAI(chatContext.chatLog).then((r) => {
-            console.log("Received: " + r);
-            r = JSON.parse(r);
-            r.questions.forEach(item => {
-              chatContext.addQuiz(item)
-            });
-            chatContext.addQuizSet(r.questions)
-          });
-        } else {
-          console.log("Empty, do not send")
-        }
+        console.log("=======handleQuiz=========");
+    // console.log(chatContext.userResponse);
+
+    // Call to get the quiz
+    if (chatContext.chatLog !== undefined && chatContext.chatLog !== "") {
+      console.log("Sending" + chatContext.chatLog);
+      console.log("Creating chat log");
+      var chatLog = "";
+      chatContext.userResponse.forEach(element => {
+        console.log(element.content);
+        chatLog += element.role + ": " + element.content + '\n';
+      });
+      console.log(chatLog)
+      getQuizOpenAI(chatLog).then((r) => {
+        console.log("Received: " + r);
+        r = JSON.parse(r);
+        r.questions.forEach(item => {
+          chatContext.addQuiz(item)
+        });
+        chatContext.addQuizSet(r.questions)
+      });
+    } else {
+      console.log("Empty, do not send")
     }
+
+    // Reset chat log
+    chatContext.resetLog();
+  }
 
     return (
         <View style={styles.container}>

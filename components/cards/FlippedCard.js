@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 45,
     justifyContent: "center",
     alignItems: "center",
+    padding: 10
   },
   text: {
     textAlign: "center",

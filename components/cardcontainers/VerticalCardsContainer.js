@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, Button, Text, View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-import QuizSelectionCard from "../cards/QuizSelectionCard"
+import QuizSelectionCard from "../cards/QuizSelectionCard";
 
 export function VerticalCardsContainer(props) {
     // const { title, quizSelections } = props
