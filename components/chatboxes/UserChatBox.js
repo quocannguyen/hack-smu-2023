@@ -13,6 +13,7 @@ export default function UserChatBox(props) {
 
 const styles = StyleSheet.create({
     container: {
+        maxWidth: "80%",
         width: "auto",
         height: "auto",
         borderRadius: 50,

@@ -12,11 +12,7 @@ export default function ChatScreen() {
     return (
         <SafeAreaView style={styles.container}>
             <ChatView />
-
-
-            <Button title="Quiz Screen" onPress={() => navigation.navigate("QuizScreen")} />
-            {/* <InputBar></InputBar> */}
-            
+            {/* <Button title="Quiz Screen" onPress={() => navigation.navigate("QuizScreen")} /> */}
             {/* <StatusBar style="auto" /> */}
             {/* <NavigationBar /> */}
         </SafeAreaView>

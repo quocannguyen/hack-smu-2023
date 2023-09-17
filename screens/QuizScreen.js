@@ -1,31 +1,42 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView, Button } from 'react-native';
+import { StyleSheet, SafeAreaView, Button, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import QuizCard from "../components/QuizCardTest"
+import TitleCard from "../components/TitleCard"
 
 export default function QuizScreen() {
-    // const navigation = useNavigation()
+  const onPressHandle = () => {
+    // navigation.navigate("ChatScreen");
+  }
 
-    const onPressHandle = () => {
-      // navigation.navigate("ChatScreen");
-    }
-
-    return (
-        <SafeAreaView style={styles.container}>
-            <QuizCard style="styles.QuizCard" question="Hello?" answer="Hi!" />
-            <Button title="Chat Screen" onPress={onPressHandle}/>
-            <StatusBar style="auto" />
-
-        </SafeAreaView>
-    );
+  return (
+    <ImageBackground
+      source={require('../assets/background.png')} // Replace with the path to your background image in the assets folder
+      style={styles.backgroundImage}
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <TitleCard title="Welcome!" text="Good news for all students!\nWe develop awesome apps!" />
+          {/* Add other components/content here */}
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
+  );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // You can adjust this based on your image size
+  },
   container: {
-    backgroundColor: '#fff',
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     padding: 50,
   },
-
+  content: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
 });

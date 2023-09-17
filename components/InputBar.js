@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "auto",
         padding: 20,
+        bottom: "auto",
         backgroundColor: '#00ff00'
     },
     input: {

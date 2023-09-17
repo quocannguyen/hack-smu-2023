@@ -31,6 +31,7 @@ export default function ChatBox(props) {
 
 const styles = StyleSheet.create({
     responseContainer: {
+        maxWidth: "80%",
         width: "auto",
         height: "auto",
         borderRadius: 50,
