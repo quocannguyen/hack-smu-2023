@@ -13,12 +13,12 @@ export default function TitleCard(props) {
 
 const styles = StyleSheet.create({
     container: {
-        display: "flex",
-        padding: 10,
+        padding: 20,
         backgroundColor: '#291',
         marginHorizontal: 10,
+        marginTop: 10,
         borderRadius: 20,
-        height: "30%",
+        height: "25%",
         width: "90%"
     },
     title: {

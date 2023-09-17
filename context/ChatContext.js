@@ -6,6 +6,7 @@ export const ChatContext = createContext({
     responses: [],
     addResponse: (response) => {},
     userResponse: [],
+    resetResponse: [],
 })
 let ChatLog = ""
 
@@ -15,10 +16,6 @@ export function ChatContextProvider(props) {
     const [userResponseState, setUserResponseState] = useState([])
 
     async function addUserInputHandler(userInput) {
-        // setUserInputsState([
-        //     ...userInputsState,
-        //     userInput
-        // ])
         setUserResponseState((prevUserResponseState) =>[
             ...prevUserResponseState,
             {
@@ -27,16 +24,10 @@ export function ChatContextProvider(props) {
             }
         ])
         ChatLog += "User: " + userInput + '\n'
-        // console.log(ChatLog)
         console.log(userResponseState)
     }
 
     async function addResponseHandler(response) {
-        let isInput = false
-        // setResponsesState([
-        //     ...responsesState,
-        //     response
-        // ])
         setUserResponseState((prevUserResponseState) =>[
             ...prevUserResponseState,
             {
@@ -45,8 +36,12 @@ export function ChatContextProvider(props) {
             }
         ])
         ChatLog += "System: " + response + '\n'
-        // console.log(ChatLog)
         console.log(userResponseState)
+    }
+
+    async function resetLogHandler() {
+        console.log("Reset handler")
+        setUserResponseState([]);
     }
 
     const context = {
@@ -54,7 +49,8 @@ export function ChatContextProvider(props) {
         addUserInput: addUserInputHandler,
         responses: responsesState,
         addResponse: addResponseHandler,
-        userResponse: userResponseState
+        userResponse: userResponseState,
+        resetResponse: resetLogHandler
     }
     return (
         <ChatContext.Provider value={context}>

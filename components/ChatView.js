@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import  { StyleSheet, ScrollView, View, Text, StatusBar, TextInput, KeyboardAvoidingView } from "react-native";
 import { ChatContext } from "../context/ChatContext";
 import ChatBox from "./chatboxes/ChatBox.js";
@@ -9,6 +9,10 @@ import InputBar from "./InputBar"
 export default function ChatView(props) {
     const chatContext = useContext(ChatContext);
     
+    useEffect(() => {
+      console.log("Rset the response");
+      chatContext.resetResponse();
+    }, [])
 
   return (
     <KeyboardAvoidingView
